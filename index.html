@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico de Ventas</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Enlaza el archivo CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Formulario de Ventas por Mes</h2>
+        <div class="form-group">
+            <label for="month">Mes:</label>
+            <input type="text" id="month" required placeholder="Ej. Enero">
+        </div>
+        <div class="form-group">
+            <label for="sales">Ventas:</label>
+            <input type="number" id="sales" required placeholder="Ingresar ventas">
+        </div>
+        <div>
+            <button onclick="addData()">Agregar Datos</button>
+        </div>
+
+        <canvas id="salesChart" width="400" height="200"></canvas>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('salesChart').getContext('2d');
+        let salesData = [];
+        let monthLabels = [];
+
+        const salesChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: monthLabels,
+                datasets: [{
+                    label: 'Ventas por Mes',
+                    data: salesData,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        function addData() {
+            const month = document.getElementById("month").value.trim();
+            const sales = parseInt(document.getElementById("sales").value.trim());
+
+            if (month && !isNaN(sales)) {
+                monthLabels.push(month);
+                salesData.push(sales);
+
+                salesChart.update();
+                
+                // Limpiar los campos después de agregar
+                document.getElementById("month").value = "";
+                document.getElementById("sales").value = "";
+            } else {
+                alert("Por favor, ingresa un mes válido y una cantidad de ventas.");
+            }
+        }
+    </script>
+
+</body>
+
+</html>
